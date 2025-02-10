@@ -1,10 +1,18 @@
-﻿namespace ToDo.Task
+﻿using SQLite;
+
+namespace ToDo.Tasks
 {
     public class TaskToDo
     {
-        public int Id { get; private set; }
-        public string TextTask { get; private set; }
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        public string TextTask { get; set; }
         public bool IsChecked { get; set; } = false;
+        public TaskToDo()
+        {
+
+        }
+        
         public TaskToDo(int id, string textTask)
         {
             this.Id = id;

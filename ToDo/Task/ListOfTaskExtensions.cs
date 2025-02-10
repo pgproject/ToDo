@@ -1,4 +1,4 @@
-﻿namespace ToDo.Task
+﻿namespace ToDo.Tasks
 {
     public static class ListOfTaskExtensions
     {
