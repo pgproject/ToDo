@@ -61,7 +61,11 @@ public partial class ListOfTask : ContentPage
         var task = (TaskToDo)buttom.BindingContext;
 
         await Task.Delay(ListOfTaskExtensions.DELAY_TIME_MS);
-        ToDoTasks.Remove(task);
+
+        if (task.IsDone)
+            DoneTasks.Remove(task);
+        else
+            ToDoTasks.Remove(task);
 
         await m_toDoDataBase.DeleteTaskAsync(task);
         await Shell.Current.GoToAsync("..");
