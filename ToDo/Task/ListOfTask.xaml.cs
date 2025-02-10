@@ -24,7 +24,6 @@ public partial class ListOfTask : ContentPage
         EntryToDoTask.Text = "";
     }
 
- 
     private async void OnCheckBoxClicked(object sender, CheckedChangedEventArgs e)
     {
         bool isChecked = e.Value; 
