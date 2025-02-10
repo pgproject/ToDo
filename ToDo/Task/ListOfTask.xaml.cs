@@ -33,15 +33,27 @@ public partial class ListOfTask : ContentPage
 
     private async void OnTaskAdd(object sender, EventArgs e)
     {
-        TaskToDo task = new TaskToDo(ToDoTask.Count, EntryToDoTask.Text)
+        TaskToDo task = new TaskToDo(ToDoTask.Count, EntryTaskTitle.Text, EnterTaskDescription.Text)
         {
             IsChecked = false
         };
 
         ToDoTask.Add(task);
-        EntryToDoTask.Text = "";
+        EntryTaskTitle.Text = "";
+        EnterTaskDescription.Text = ""; 
 
         await m_toDoDataBase.SaveItemAsync(task);
+        await Shell.Current.GoToAsync("..");
+    }
+    private async void OnDeleteTask(object sender, EventArgs e)
+    {
+        var buttom = (Button)sender;
+        var task = (TaskToDo)buttom.BindingContext;
+
+        await Task.Delay(ListOfTaskExtensions.DELAY_TIME_MS);
+        ToDoTask.Remove(task);
+
+        await m_toDoDataBase.DeleteItemAsync(task);
         await Shell.Current.GoToAsync("..");
     }
 
@@ -62,6 +74,5 @@ public partial class ListOfTask : ContentPage
             await m_toDoDataBase.DeleteItemAsync(task);
             await Shell.Current.GoToAsync("..");
         }
-
     }
 }

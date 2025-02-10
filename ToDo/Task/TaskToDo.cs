@@ -6,17 +6,19 @@ namespace ToDo.Tasks
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public string TextTask { get; set; }
+        public string TitleTask { get; set; }
+        public string DescriptionTask { get; set; }
         public bool IsChecked { get; set; } = false;
         public TaskToDo()
         {
 
         }
         
-        public TaskToDo(int id, string textTask)
+        public TaskToDo(int id, string titleTask, string descriptionTask)
         {
             this.Id = id;
-            this.TextTask = textTask;
+            this.TitleTask = titleTask;
+            this.DescriptionTask = descriptionTask;
         }
     }
 }

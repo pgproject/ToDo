@@ -6,8 +6,11 @@
     <ScrollView>
         <VerticalStackLayout>
 
-            <Entry x:Name="EntryToDoTask"
-                   Placeholder="Enter text"/>
+            <Entry x:Name="EntryTaskTitle"
+                   Placeholder="Enter title of new task"/>
+
+            <Entry x:Name="EnterTaskDescription"
+                   Placeholder="Enter description of new task" />
 
             <Button x:Name="AddTask"
                     Text="Add task" 
@@ -19,12 +22,26 @@
                     <DataTemplate>
                         <Grid Padding="10">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="30*" />
                             </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="100" />
+                            </Grid.RowDefinitions>
                             
-                            <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}" CheckedChanged="OnCheckBoxClicked" VerticalOptions="Start"/>
-                            <Label Grid.Column="1" Text="{Binding TextTask}" VerticalOptions="Center" />
+                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IsChecked}" CheckedChanged="OnCheckBoxClicked" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Grid.Row="0" Text="{Binding TitleTask}" FontSize="12" FontAttributes="Bold" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Grid.Row="1" Text="{Binding DescriptionTask}"  FontSize="10" VerticalOptions="End" />
+                            <Button Grid.Column="2" 
+                                    x:Name="DeleteTask"
+                                    Text="Delete task" 
+                                    Clicked="OnDeleteTask"
+                                    FontSize="10"
+                                    HorizontalOptions="Start"
+                                    HeightRequest="10"
+                                    WidthRequest="100" />
+                            
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
