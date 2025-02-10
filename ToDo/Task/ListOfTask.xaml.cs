@@ -70,7 +70,6 @@ public partial class ListOfTask : ContentPage
         {
             task.IsDone = e.Value;
             await m_toDoDataBase.UpdateTaskAsync(task);
-
         }
     }
 }
