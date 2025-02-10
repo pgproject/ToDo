@@ -57,6 +57,5 @@ namespace ToDo.Database
             await Init();
             return await m_database.Table<TaskToDo>().Where(t => !t.IsDone).ToListAsync();
         }
-
     }
 }

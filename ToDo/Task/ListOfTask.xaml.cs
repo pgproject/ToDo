@@ -34,7 +34,7 @@ public partial class ListOfTask : ContentPage
 
     private async void OnTaskAdd(object sender, EventArgs e)
     {
-        if (EntryTaskTitle.Text == "")
+        if (string.IsNullOrEmpty(EntryTaskTitle.Text))
         {
             EntryTaskTitle.Placeholder = ListOfTaskExtensions.MISSING_TITLE;
             EntryTaskTitle.PlaceholderColor = new Color(255, 0, 0, 0.5f);
