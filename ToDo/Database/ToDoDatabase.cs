@@ -5,7 +5,7 @@ namespace ToDo.Database
 {
     public class ToDoDatabase
     {
-        SQLiteAsyncConnection Database;
+        private SQLiteAsyncConnection m_database;
 
         public ToDoDatabase()
         {
@@ -14,30 +14,46 @@ namespace ToDo.Database
 
         private async Task Init()
         {
-            if (Database is not null)
+            if (m_database is not null)
                 return;
 
-            Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-            var result = await Database.CreateTableAsync<TaskToDo>();
+            m_database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+            var result = await m_database.CreateTableAsync<TaskToDo>();
         }
 
-        public async Task<List<TaskToDo>> GetItemsAsync()
+        public async Task<List<TaskToDo>> GetAllTaskAsync()
         {
             await Init();
-            return await Database.Table<TaskToDo>().ToListAsync();
+            return await m_database.Table<TaskToDo>().ToListAsync();
         }
 
-        public async Task<int> SaveItemAsync(TaskToDo item)
+        public async Task<int> SaveTaskAsync(TaskToDo task)
         {
             await Init();
-           
-            return await Database.InsertAsync(item);
+            return await m_database.InsertAsync(task);
+        }
+        public async Task<int> UpdateTaskAsync(TaskToDo task)
+        {
+            await Init();
+            return await m_database.UpdateAsync(task);
         }
 
-        public async Task<int> DeleteItemAsync(TaskToDo item)
+        public async Task<int> DeleteTaskAsync(TaskToDo task)
         {
             await Init();
-            return await Database.DeleteAsync(item);
+            return await m_database.DeleteAsync(task);
+        }
+
+        public async Task<List<TaskToDo>> GetTaskToDoAsync()
+        {
+            await Init();
+            return await m_database.Table<TaskToDo>().Where(t => t.IsDone).ToListAsync();
+        }
+
+        public async Task<List<TaskToDo>> GetDoneTaskAsync()
+        {
+            await Init();
+            return await m_database.Table<TaskToDo>().Where(t => !t.IsDone).ToListAsync();
         }
     }
 }

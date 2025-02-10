@@ -5,7 +5,7 @@ namespace ToDo.Tasks;
 
 public partial class ListOfTask : ContentPage
 {
-    public ObservableCollection<TaskToDo> ToDoTask { get; set; } = new ObservableCollection<TaskToDo>();
+    public ObservableCollection<TaskToDo> Tasks { get; set; } = new ObservableCollection<TaskToDo>();
 
     private ToDoDatabase m_toDoDataBase;
 
@@ -21,28 +21,26 @@ public partial class ListOfTask : ContentPage
 
     private async void LoadDataBase()
     {
-        var items = await m_toDoDataBase.GetItemsAsync();
+        var allTask = await m_toDoDataBase.GetAllTaskAsync();
 
-        ToDoTask.Clear(); 
-
-        foreach (var item in items)
+        Tasks.Clear(); 
+        
+        foreach (var task in allTask)
         {
-            ToDoTask.Add(item);
+            Tasks.Add(task);
         }
+        Tasks.OrderBy(x => !x.IsDone).ToList();
     }
 
     private async void OnTaskAdd(object sender, EventArgs e)
     {
-        TaskToDo task = new TaskToDo(ToDoTask.Count, EntryTaskTitle.Text, EnterTaskDescription.Text)
-        {
-            IsChecked = false
-        };
-
-        ToDoTask.Add(task);
+        TaskToDo task = new TaskToDo(Tasks.Count, EntryTaskTitle.Text, EnterTaskDescription.Text, false);
+        
+        Tasks.Add(task);
         EntryTaskTitle.Text = "";
         EnterTaskDescription.Text = ""; 
 
-        await m_toDoDataBase.SaveItemAsync(task);
+        await m_toDoDataBase.SaveTaskAsync(task);
         await Shell.Current.GoToAsync("..");
     }
     private async void OnDeleteTask(object sender, EventArgs e)
@@ -50,29 +48,19 @@ public partial class ListOfTask : ContentPage
         var buttom = (Button)sender;
         var task = (TaskToDo)buttom.BindingContext;
 
-        await Task.Delay(ListOfTaskExtensions.DELAY_TIME_MS);
-        ToDoTask.Remove(task);
+        await System.Threading.Tasks.Task.Delay(ListOfTaskExtensions.DELAY_TIME_MS);
+        Tasks.Remove(task);
 
-        await m_toDoDataBase.DeleteItemAsync(task);
+        await m_toDoDataBase.DeleteTaskAsync(task);
         await Shell.Current.GoToAsync("..");
     }
 
     private async void OnCheckBoxClicked(object sender, CheckedChangedEventArgs e)
     {
-        bool isChecked = e.Value; 
-
-        var checkBox = (CheckBox)sender;
-        var task = (TaskToDo)checkBox.BindingContext;
-
-        task.IsChecked = isChecked;
-        if (e.Value)
+        if (sender is CheckBox checkBox && checkBox.BindingContext is TaskToDo task)
         {
-            await Task.Delay(ListOfTaskExtensions.DELAY_TIME_MS);
-
-            ToDoTask.Remove(task);
-
-            await m_toDoDataBase.DeleteItemAsync(task);
-            await Shell.Current.GoToAsync("..");
+            task.IsDone = e.Value;
+            await m_toDoDataBase.UpdateTaskAsync(task);
         }
     }
 }

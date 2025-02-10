@@ -17,7 +17,7 @@
                     Clicked="OnTaskAdd"
                     HorizontalOptions="Fill" />
 
-            <CollectionView ItemsSource="{Binding ToDoTask}">
+            <CollectionView ItemsSource="{Binding Tasks}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">
@@ -29,8 +29,8 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="100" />
                             </Grid.RowDefinitions>
-                            
-                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IsChecked}" CheckedChanged="OnCheckBoxClicked" VerticalOptions="Center"/>
+
+                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IsDone}" CheckedChanged="OnCheckBoxClicked" VerticalOptions="Center"/>
                             <Label Grid.Column="1" Grid.Row="0" Text="{Binding TitleTask}" FontSize="12" FontAttributes="Bold" VerticalOptions="Center" />
                             <Label Grid.Column="1" Grid.Row="1" Text="{Binding DescriptionTask}"  FontSize="10" VerticalOptions="End" />
                             <Button Grid.Column="2" 
@@ -41,12 +41,11 @@
                                     HorizontalOptions="Start"
                                     HeightRequest="10"
                                     WidthRequest="100" />
-                            
+
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            
         </VerticalStackLayout>
     </ScrollView>
     
