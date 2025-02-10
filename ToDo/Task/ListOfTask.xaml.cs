@@ -8,37 +8,46 @@ public partial class ListOfTask : ContentPage
     public ObservableCollection<TaskToDo> Tasks { get; set; } = new ObservableCollection<TaskToDo>();
 
     private ToDoDatabase m_toDoDataBase;
+    private Color m_defaultPlaceHolderColor;
 
     public ListOfTask()
 	{
         InitializeComponent();
-
-        m_toDoDataBase = new ToDoDatabase();
         LoadDataBase();
 
         BindingContext = this;
+        m_defaultPlaceHolderColor = EntryTaskTitle.PlaceholderColor;
     }
 
     private async void LoadDataBase()
     {
-        var allTask = await m_toDoDataBase.GetAllTaskAsync();
+        m_toDoDataBase = new ToDoDatabase();
 
-        Tasks.Clear(); 
+        var allTask = await m_toDoDataBase.GetAllTaskAsync();
         
+        Tasks.Clear();
         foreach (var task in allTask)
         {
             Tasks.Add(task);
         }
-        Tasks.OrderBy(x => !x.IsDone).ToList();
     }
 
     private async void OnTaskAdd(object sender, EventArgs e)
     {
+        if (EntryTaskTitle.Text == "")
+        {
+            EntryTaskTitle.Placeholder = ListOfTaskExtensions.MISSING_TITLE;
+            EntryTaskTitle.PlaceholderColor = new Color(255, 0, 0, 0.5f);
+            return;
+        }
+
         TaskToDo task = new TaskToDo(Tasks.Count, EntryTaskTitle.Text, EnterTaskDescription.Text, false);
-        
         Tasks.Add(task);
+       
         EntryTaskTitle.Text = "";
-        EnterTaskDescription.Text = ""; 
+        EntryTaskTitle.Placeholder = ListOfTaskExtensions.SET_TITLE;
+        EntryTaskTitle.PlaceholderColor = m_defaultPlaceHolderColor;
+        EnterTaskDescription.Text = "";
 
         await m_toDoDataBase.SaveTaskAsync(task);
         await Shell.Current.GoToAsync("..");
@@ -48,7 +57,7 @@ public partial class ListOfTask : ContentPage
         var buttom = (Button)sender;
         var task = (TaskToDo)buttom.BindingContext;
 
-        await System.Threading.Tasks.Task.Delay(ListOfTaskExtensions.DELAY_TIME_MS);
+        await Task.Delay(ListOfTaskExtensions.DELAY_TIME_MS);
         Tasks.Remove(task);
 
         await m_toDoDataBase.DeleteTaskAsync(task);
@@ -61,6 +70,7 @@ public partial class ListOfTask : ContentPage
         {
             task.IsDone = e.Value;
             await m_toDoDataBase.UpdateTaskAsync(task);
+
         }
     }
 }

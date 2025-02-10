@@ -1,4 +1,6 @@
 ﻿using SQLite;
+using System.Collections.ObjectModel;
+using System.Runtime.InteropServices.Marshalling;
 using ToDo.Tasks;
 
 namespace ToDo.Database
@@ -55,5 +57,6 @@ namespace ToDo.Database
             await Init();
             return await m_database.Table<TaskToDo>().Where(t => !t.IsDone).ToListAsync();
         }
+
     }
 }

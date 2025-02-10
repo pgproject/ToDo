@@ -1,7 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ToDo.Tasks.ListOfTask"
-             Title="List of to do tasks">
+             Title="List of tasks">
 
     <ScrollView>
         <VerticalStackLayout>
@@ -15,7 +15,7 @@
             <Button x:Name="AddTask"
                     Text="Add task" 
                     Clicked="OnTaskAdd"
-                    HorizontalOptions="Fill" />
+                    HorizontalOptions="Start" />
 
             <CollectionView ItemsSource="{Binding Tasks}">
                 <CollectionView.ItemTemplate>
