@@ -16,8 +16,9 @@
                     Text="Add task" 
                     Clicked="OnTaskAdd"
                     HorizontalOptions="Start" />
-
-            <CollectionView ItemsSource="{Binding Tasks}">
+            
+            <Label Text="To do tasks" FontSize="24" HorizontalOptions="Center" />
+            <CollectionView ItemsSource="{Binding ToDoTasks}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">
@@ -29,7 +30,8 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="100" />
                             </Grid.RowDefinitions>
-
+                            
+                            
                             <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IsDone}" CheckedChanged="OnCheckBoxClicked" VerticalOptions="Center"/>
                             <Label Grid.Column="1" Grid.Row="0" Text="{Binding TitleTask}" FontSize="12" FontAttributes="Bold" VerticalOptions="Center" />
                             <Label Grid.Column="1" Grid.Row="1" Text="{Binding DescriptionTask}"  FontSize="10" VerticalOptions="End" />
@@ -41,6 +43,36 @@
                                     HorizontalOptions="Start"
                                     HeightRequest="10"
                                     WidthRequest="100" />
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Label Text="Done tasks" FontSize="24" HorizontalOptions="Center" />
+            <CollectionView ItemsSource="{Binding DoneTasks}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="30*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="100" />
+                            </Grid.RowDefinitions>
+                            
+                            <CheckBox Grid.Column="0" Grid.Row="0" IsChecked="{Binding IsDone}" CheckedChanged="OnCheckBoxClicked" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Grid.Row="0" Text="{Binding TitleTask}" FontSize="12" FontAttributes="Bold" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Grid.Row="1" Text="{Binding DescriptionTask}"  FontSize="10" VerticalOptions="End" />
+                            <Button Grid.Column="2" 
+                        x:Name="DeleteTask"
+                        Text="Delete task" 
+                        Clicked="OnDeleteTask"
+                        FontSize="10"
+                        HorizontalOptions="Start"
+                        HeightRequest="10"
+                        WidthRequest="100" />
 
                         </Grid>
                     </DataTemplate>

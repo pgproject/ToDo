@@ -1,11 +1,14 @@
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using ToDo.Database;
 
 namespace ToDo.Tasks;
 
 public partial class ListOfTask : ContentPage
 {
-    public ObservableCollection<TaskToDo> Tasks { get; set; } = new ObservableCollection<TaskToDo>();
+    public ObservableCollection<TaskToDo> ToDoTasks { get; set; } = new ObservableCollection<TaskToDo>();
+    public ObservableCollection<TaskToDo> DoneTasks { get; set; } = new ObservableCollection<TaskToDo>();
 
     private ToDoDatabase m_toDoDataBase;
     private Color m_defaultPlaceHolderColor;
@@ -25,10 +28,10 @@ public partial class ListOfTask : ContentPage
 
         var allTask = await m_toDoDataBase.GetAllTaskAsync();
         
-        Tasks.Clear();
+        ToDoTasks.Clear();
         foreach (var task in allTask)
         {
-            Tasks.Add(task);
+            ToDoTasks.Add(task);
         }
     }
 
@@ -41,9 +44,9 @@ public partial class ListOfTask : ContentPage
             return;
         }
 
-        TaskToDo task = new TaskToDo(Tasks.Count, EntryTaskTitle.Text, EnterTaskDescription.Text, false);
-        Tasks.Add(task);
-       
+        TaskToDo task = new TaskToDo(ToDoTasks.Count, EntryTaskTitle.Text, EnterTaskDescription.Text, false);
+        ToDoTasks.Add(task);
+
         EntryTaskTitle.Text = "";
         EntryTaskTitle.Placeholder = ListOfTaskExtensions.SET_TITLE;
         EntryTaskTitle.PlaceholderColor = m_defaultPlaceHolderColor;
@@ -58,7 +61,7 @@ public partial class ListOfTask : ContentPage
         var task = (TaskToDo)buttom.BindingContext;
 
         await Task.Delay(ListOfTaskExtensions.DELAY_TIME_MS);
-        Tasks.Remove(task);
+        ToDoTasks.Remove(task);
 
         await m_toDoDataBase.DeleteTaskAsync(task);
         await Shell.Current.GoToAsync("..");
@@ -69,6 +72,21 @@ public partial class ListOfTask : ContentPage
         if (sender is CheckBox checkBox && checkBox.BindingContext is TaskToDo task)
         {
             task.IsDone = e.Value;
+
+            if (task.IsDone && DoneTasks.Contains(task)) return;
+            if (!task.IsDone && ToDoTasks.Contains(task)) return;
+
+
+            if (task.IsDone)
+            {
+                ToDoTasks.Remove(task);
+                DoneTasks.Add(task);
+            }
+            else
+            {
+                ToDoTasks.Add(task);
+                DoneTasks.Remove(task);
+            }
             await m_toDoDataBase.UpdateTaskAsync(task);
         }
     }
