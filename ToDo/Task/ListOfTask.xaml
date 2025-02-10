@@ -1,0 +1,36 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ToDo.Task.ListOfTask"
+             Title="List of to do tasks">
+
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <Entry x:Name="EntryToDoTask"
+                   Placeholder="Enter text"/>
+
+            <Button x:Name="AddTask"
+                    Text="Add task" 
+                    Clicked="OnTaskAdd"
+                    HorizontalOptions="Fill" />
+
+            <CollectionView ItemsSource="{Binding ToDoTask}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}" CheckedChanged="OnCheckBoxClicked" VerticalOptions="Start"/>
+                            <Label Grid.Column="1" Text="{Binding TextTask}" VerticalOptions="Center" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+        </VerticalStackLayout>
+    </ScrollView>
+    
+</ContentPage>
